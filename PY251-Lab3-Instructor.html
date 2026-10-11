@@ -1,0 +1,871 @@
+<!doctype html>
+<!-- PY251 Lab 3 — Instructor edition. Standalone; no companion files needed.
+     Label configuration is below. Internal sections are marked with comments. -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PY251 · Lab 3 worksheet</title><!-- ======================================================================
+     EDIT WORKSHEET LABELS HERE
+
+     Change only the text on the right of each cell address below.
+     Example: "A1": "Total mass" -> "A1": "Total hanging mass"
+     Keep quotation marks and commas. Unicode symbols can be pasted directly.
+     These are labels/units only; students still enter their own data/formulas.
+     Edit BOTH HTML files if you want student and instructor labels to match.
+
+     Reload the app after saving this file. Existing default labels update;
+     labels edited directly in the grid are preserved. Data is never cleared.
+     A downloaded worksheet file retains its saved labels until next reload.
+     ====================================================================== -->
+<script>
+  // Public configuration: this is the only label list you need to edit.
+  const WORKSHEET_LABELS = {
+    "A1": "Total mass",
+    "A2": "g",
+    "B1": "Position ℓ",
+    "B2": "cm",
+    "C1": "Uncertainty δᵢ",
+    "C2": "cm",
+    "D1": "Mass m",
+    "D2": "kg",
+    "E1": "Force F = x",
+    "E2": "N",
+    "F1": "Position ℓ = y",
+    "F2": "m",
+    "G1": "Uncertainty δᵢ",
+    "G2": "m",
+    "H1": "F² = x²",
+    "H2": "N²",
+    "I1": "Fℓ = xy",
+    "I2": "N·m",
+    "J1": "Predicted ℓ̂",
+    "J2": "m",
+    "K1": "Residual r",
+    "K2": "m",
+    "L1": "Residual r²",
+    "L2": "m²",
+    "A10": "Σ columns",
+    "A12": "g (exact)",
+    "C12": "m/s²",
+    "A13": "N",
+    "C13": "observations",
+    "A14": "Σ F",
+    "C14": "N",
+    "A15": "Σ ℓ",
+    "C15": "m",
+    "A16": "Σ F²",
+    "C16": "N²",
+    "A17": "Σ Fℓ",
+    "C17": "N·m",
+    "A18": "Mean F",
+    "C18": "N",
+    "A19": "Mean ℓ",
+    "C19": "m",
+    "A20": "D",
+    "C20": "N²",
+    "A21": "Slope B",
+    "C21": "m/N",
+    "A22": "Intercept A",
+    "C22": "m",
+    "A23": "Score S",
+    "C23": "m²",
+    "A24": "Scatter s",
+    "C24": "m",
+    "A25": "Uncertainty δ_A",
+    "C25": "m",
+    "A26": "Uncertainty δ_B",
+    "C26": "m/N",
+    "A27": "Spring constant k",
+    "C27": "N/m",
+    "A28": "Uncertainty δ_k",
+    "C28": "N/m",
+    "A29": "Relative δ_B/B",
+    "C29": "dimensionless",
+    "A30": "Assumed δ_m",
+    "C30": "kg",
+    "A31": "Estimated δ_F",
+    "C31": "N",
+    "A32": "|B|δ_F",
+    "C32": "m",
+    "E23": "Reported k",
+    "G23": "N/m",
+    "E24": "Uncertainty δ_k",
+    "G24": "N/m"
+};
+
+  // Internal reference for recognizing the original labels in older autosaves.
+  // Do not edit this list when changing a label above.
+  const ORIGINAL_WORKSHEET_LABELS = {
+    "A1": "Total mass",
+    "A2": "g",
+    "B1": "Position ℓ",
+    "B2": "cm",
+    "C1": "Uncertainty δᵢ",
+    "C2": "cm",
+    "D1": "Mass m",
+    "D2": "kg",
+    "E1": "Force F = x",
+    "E2": "N",
+    "F1": "Position ℓ = y",
+    "F2": "m",
+    "G1": "Uncertainty δᵢ",
+    "G2": "m",
+    "H1": "F² = x²",
+    "H2": "N²",
+    "I1": "Fℓ = xy",
+    "I2": "N·m",
+    "J1": "Predicted ℓ̂",
+    "J2": "m",
+    "K1": "Residual r",
+    "K2": "m",
+    "L1": "Residual r²",
+    "L2": "m²",
+    "A10": "Σ columns",
+    "A12": "g (exact)",
+    "C12": "m/s²",
+    "A13": "N",
+    "C13": "observations",
+    "A14": "Σ F",
+    "C14": "N",
+    "A15": "Σ ℓ",
+    "C15": "m",
+    "A16": "Σ F²",
+    "C16": "N²",
+    "A17": "Σ Fℓ",
+    "C17": "N·m",
+    "A18": "Mean F",
+    "C18": "N",
+    "A19": "Mean ℓ",
+    "C19": "m",
+    "A20": "D",
+    "C20": "N²",
+    "A21": "Slope B",
+    "C21": "m/N",
+    "A22": "Intercept A",
+    "C22": "m",
+    "A23": "Score S",
+    "C23": "m²",
+    "A24": "Scatter s",
+    "C24": "m",
+    "A25": "Uncertainty δ_A",
+    "C25": "m",
+    "A26": "Uncertainty δ_B",
+    "C26": "m/N",
+    "A27": "Spring constant k",
+    "C27": "N/m",
+    "A28": "Uncertainty δ_k",
+    "C28": "N/m",
+    "A29": "Relative δ_B/B",
+    "C29": "dimensionless",
+    "A30": "Assumed δ_m",
+    "C30": "kg",
+    "A31": "Estimated δ_F",
+    "C31": "N",
+    "A32": "|B|δ_F",
+    "C32": "m",
+    "E23": "Reported k",
+    "G23": "N/m",
+    "E24": "Uncertainty δ_k",
+    "G24": "N/m"
+};
+
+  // Apply configured labels to a newly created blank or demonstration sheet.
+  function applyWorksheetLabels(sheet) {
+    Object.assign(sheet.cells, WORKSHEET_LABELS);
+    return sheet;
+  }
+</script>
+
+<!-- PAGE STYLING — colors, spacing, grid and dialogs -->
+<style>
+:root {
+  font:13px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:#263831;
+  background:#fff;
+  --line:#dfe5e0;
+  --green:#246b51
+}
+* {
+  box-sizing:border-box
+}
+[hidden] {
+  display:none!important
+}
+body {
+  margin:0
+}
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:13px 20px;
+  border-bottom:1px solid var(--line);
+  gap:15px
+}
+.identity,.actions,.tools,.formulabar {
+  display:flex;
+  align-items:center;
+  gap:10px
+}
+.brand {
+  font-size:13px;
+  letter-spacing:1px;
+  font-weight:800;
+  color:var(--green)
+}
+#title {
+  font-size:16px;
+  border:0;
+  width:230px
+}
+#saved {
+  font-size:10px;
+  color:#75847a
+}
+button,.button {
+  font:inherit;
+  cursor:pointer;
+  padding:7px 10px;
+  border:1px solid #d5dfd7;
+  border-radius:5px;
+  color:#405347;
+  background:white;
+  display:inline-block
+}
+button:hover,.button:hover {
+  background:#eff5ef
+}
+input,select {
+  font:inherit;
+  border:1px solid #d5dfd7;
+  border-radius:4px;
+  padding:7px;
+  color:#263831;
+  min-width:0
+}
+input:focus,select:focus,button:focus-visible {
+  outline:2px solid #408567;
+  outline-offset:-1px
+}
+.tools {
+  padding:8px 20px;
+  background:#fafcf9;
+  border-bottom:1px solid var(--line);
+  gap:6px;
+  flex-wrap:wrap
+}
+.tools button {
+  border:0;
+  background:transparent;
+  font-size:12px
+}
+.tools button:hover {
+  background:#eaf2eb
+}
+.divider {
+  height:20px;
+  border-left:1px solid #dbe4dc;
+  margin:0 8px
+}
+.spacer {
+  flex:1
+}
+.formulabar {
+  height:40px;
+  border-bottom:1px solid var(--line);
+  padding:4px 15px;
+  gap:12px
+}
+#address {
+  width:72px;
+  border-right:1px solid var(--line);
+  font-size:12px;
+  color:#52665a
+}
+.fx {
+  color:#819489;
+  font-family:Georgia,serif;
+  font-size:18px
+}
+#formula {
+  flex:1;
+  border:0;
+  font-family:monospace;
+  font-size:12px
+}
+.formulabar button {
+  border:0;
+  font-size:11px
+}
+.workspace {
+  display:flex;
+  align-items:stretch
+}
+main {
+  flex:1;
+  min-width:0
+}
+.sheetwrap {
+  overflow:auto;
+  height:calc(100vh - 165px);
+  min-height:360px;
+  border-bottom:1px solid var(--line)
+}
+table {
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;
+  font-size:12px
+}
+#sheet th {
+  height:27px;
+  min-width:38px;
+  width:38px;
+  background:#f4f7f3;
+  border-right:1px solid #d6dfd7;
+  border-bottom:1px solid #d6dfd7;
+  color:#718276;
+  font-weight:400;
+  position:sticky;
+  z-index:2;
+  cursor:pointer
+}
+#sheet thead th {
+  top:0;
+  width:116px;
+  min-width:116px
+}
+#sheet thead th:first-child {
+  width:38px;
+  min-width:38px;
+  left:0;
+  z-index:4
+}
+#sheet tbody th {
+  left:0
+}
+#sheet td {
+  height:28px;
+  width:116px;
+  min-width:116px;
+  padding:0;
+  border-right:1px solid #e3e8e2;
+  border-bottom:1px solid #e3e8e2;
+  position:relative
+}
+#sheet td input {
+  border:0;
+  border-radius:0;
+  width:100%;
+  height:27px;
+  padding:4px 7px;
+  background:transparent;
+  font-size:12px;
+  outline:none
+}
+#sheet td.selected {
+  background:#edf5ee
+}
+#sheet td.active {
+  box-shadow:inset 0 0 0 2px var(--green)
+}
+#sheet td.error input {
+  color:#ae5034
+}
+.statusbar {
+  display:flex;
+  justify-content:space-between;
+  padding:8px 15px;
+  font-size:10px;
+  color:#718276;
+  gap:10px;
+  min-height:29px
+}
+aside {
+  width:300px;
+  flex-shrink:0;
+  border-left:1px solid var(--line);
+  padding:18px;
+  background:#fafcf8;
+  height:calc(100vh - 140px);
+  overflow:auto
+}
+.guidehead,.dialoghead {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px
+}
+.guidehead button,.dialoghead button {
+  border:0;
+  font-size:19px
+}
+aside p {
+  font-size:12px;
+  color:#637568;
+  line-height:1.65
+}
+details {
+  border-bottom:1px solid #dce4db;
+  padding:14px 0
+}
+summary {
+  font-weight:600;
+  cursor:pointer;
+  font-size:12px
+}
+.math {
+  line-height:1.9;
+  font-family:Georgia,serif;
+  font-size:15px;
+  padding:10px 0;
+  color:#305b40
+}
+code {
+  font-size:11px;
+  color:var(--green)
+}
+dialog {
+  border:1px solid #d6dfd7;
+  border-radius:12px;
+  padding:24px;
+  max-width:600px;
+  width:calc(100% - 32px);
+  color:#263831
+}
+dialog::backdrop {
+  background:#223d2c55
+}
+h2 {
+  font-size:19px;
+  margin:0 0 15px
+}
+.fields {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin:16px 0
+}
+label {
+  font-size:11px;
+  color:#597063
+}
+label input,label select {
+  display:block;
+  width:100%;
+  margin-top:5px
+}
+.checkbox {
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+.checkbox input {
+  width:auto;
+  margin:0
+}
+.hint {
+  font-size:11px;
+  color:#738378;
+  line-height:1.65
+}
+.primary {
+  background:var(--green);
+  color:white;
+  border-color:var(--green)
+}
+.exportbuttons {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap
+}
+#plots {
+  padding:22px;
+  background:#f7faf6
+}
+.graphcard {
+  background:white;
+  border:1px solid #dce5dd;
+  border-radius:8px;
+  margin-bottom:20px;
+  padding:18px
+}
+.graphhead {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+.graphhead h3 {
+  font-size:14px;
+  margin:0
+}
+.graphcard svg {
+  max-width:100%;
+  width:850px;
+  display:block;
+  margin:auto
+}
+.graphsettings {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px
+}
+.grapherror {
+  font-size:11px;
+  color:#a14f31
+}
+.graphhint {
+  font-size:11px;
+  color:#6d7f73
+}
+#reportControls {
+  padding:15px;
+  display:flex;
+  gap:10px
+}
+#reportContent {
+  max-width:1000px;
+  margin:20px auto;
+  padding:20px
+}
+#reportContent table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:10px
+}
+#reportContent td,#reportContent th {
+  border:1px solid #d6dfd7;
+  padding:5px;
+  overflow-wrap:anywhere
+}
+#reportContent pre {
+  white-space:pre-wrap;
+  font:12px monospace;
+  line-height:1.6
+}
+#reportContent svg {
+  max-width:100%
+}
+.reportmode header,.reportmode .tools,.reportmode .formulabar,.reportmode .workspace {
+  display:none
+}
+@media(max-width:800px) {
+  header {
+  padding:10px;
+  flex-wrap:wrap
+}
+#saved {
+  display:none
+}
+#title {
+  width:180px
+}
+.actions {
+  gap:4px
+}
+.tools {
+  padding:7px 10px
+}
+aside {
+  position:fixed;
+  right:0;
+  top:130px;
+  bottom:0;
+  height:auto;
+  width:300px;
+  z-index:6;
+  box-shadow:-8px 0 30px #31432f22
+}
+.statusbar span:last-child {
+  display:none
+}
+.graphsettings {
+  grid-template-columns:1fr 1fr
+}
+
+}
+@media print {
+  header,.tools,.formulabar,.workspace,#reportControls,dialog {
+  display:none!important
+}
+#reportContent {
+  display:block!important;
+  margin:0;
+  padding:0
+}
+#reportContent table {
+  font-size:8pt
+}
+#reportContent pre {
+  font-size:9pt
+}
+.reportgraph {
+  break-before:page;
+  break-inside:avoid
+}
+tr {
+  break-inside:avoid
+}
+@page {
+  size:letter landscape;
+  margin:12mm
+}
+
+}
+
+#example {
+  color:#246b51
+}
+
+
+aside ol,aside ul {
+  padding-left:20px;
+  font-size:12px;
+  line-height:1.7;
+  color:#637568
+}
+aside li {
+  margin:8px 0
+}
+.helpTable {
+  width:100%;
+  table-layout:auto;
+  border-collapse:collapse;
+  font-size:11px
+}
+.helpTable td,.helpTable th {
+  padding:8px 5px;
+  border-bottom:1px solid #dce4db;
+  text-align:left;
+  vertical-align:top
+}
+.helpTable code {
+  white-space:normal;
+  overflow-wrap:anywhere
+}
+
+
+</style>
+
+
+</head>
+<body>
+
+<!-- PAGE INTERFACE — title and action buttons -->
+<header><div class="identity"><span class="brand">PY251</span><input id="title" aria-label="Worksheet title" value="PY251 Lab 3 worksheet"><span id="saved" role="status"></span></div>
+<div class="actions"><button id="save">Save</button><label class="button">Open<input id="open" type="file" accept=".json" hidden></label><button id="exports">Export</button><button id="guideToggle">Instructions</button></div>
+</header>
+<div class="tools"><button id="addrow">+ Rows</button><button id="addcol">+ Column</button><button id="fill">Fill down</button><button id="copy">Copy selection</button><span class="divider"></span><button id="example" title="Replace the sheet with a complete artificial-data analysis">Load completed example</button><button id="restoreExample" hidden>Restore previous sheet</button><button id="graph">Create graph</button><button id="check">Check calculation</button><span class="spacer"></span><button id="fresh">New Lab 3 sheet</button></div>
+<div class="formulabar"><span id="address">A1</span><span class="fx">ƒx</span><input id="formula" aria-label="Formula bar" placeholder="Enter a value, label, or formula starting with ="><button id="apply">Apply</button></div>
+<div class="workspace"><main><div id="sheetWrap" class="sheetwrap"><table id="sheet" aria-label="Spreadsheet"></table>
+</div>
+<div class="statusbar"><span id="selectionStatus" role="status">Select a cell to begin.</span><span>Formulas use A1 references · Work stays in this browser</span></div>
+<section id="plots" hidden></section>
+</main>
+<aside id="guide" hidden><div class="guidehead"><strong>Lab 3 · How to use this worksheet</strong><button id="guideClose" aria-label="Close guide">×</button></div>
+<p>The starting sheet supplies labels and units only. All measurement, constant and formula cells are yours to fill. Use this app for your data, calculations and graphs. Enter written explanations directly in Gradescope.</p>
+<details open><summary>1 · Enter and edit a cell</summary><ol><li>Click a cell. Its address, such as <b>A3</b>, appears beside the formula bar. Letters identify columns; numbers identify rows.</li><li>Type a measurement or label. Enter numbers without units, for example <code>50</code>. Put units in a heading or separate units row.</li><li>Press <b>Enter</b> to save the entry and move down, or <b>Tab</b> to move right. Clicking another cell also saves the entry.</li><li>To edit a cell, click it and change its entry. You can also use the <b>ƒx formula bar</b> above the grid, then press Enter or click Apply. Press Escape in a cell to cancel an edit.</li></ol><p>The grid displays a formula’s result after you leave the cell. Clicking it shows the original formula; the formula bar and cell tooltip also let you inspect the calculation.</p></details>
+<details><summary>2 · Write your first formula</summary><p>Every formula starts with <code>=</code>. Use cell addresses for the values you need; you do not need to type ℓ, δ or other mathematical symbols.</p><p>If <b>A3</b> contains a mass in grams, click the cell where you want the mass in kilograms, type <code>=A3/1000</code>, and press Enter. If A3 is 50, the result is 0.05.</p><p>Changing A3 later updates every calculation that refers to it. Keep conversions in formulas, rather than retyping rounded results.</p><table class="helpTable"><tr><th>Operation</th><th>Example</th></tr><tr><td>Add / subtract</td><td><code>=F3-J3</code></td></tr><tr><td>Multiply</td><td><code>=E3*F3</code></td></tr><tr><td>Divide</td><td><code>=A3/1000</code></td></tr><tr><td>Square</td><td><code>=E3^2</code></td></tr><tr><td>Group operations</td><td><code>=(B15-B21*B14)/B13</code></td></tr></table>
+<p>Use <code>*</code> for multiplication, <code>/</code> for division, <code>^</code> for powers, and ordinary parentheses. Do not enter ×, ÷, superscript digits or units inside a formula.</p></details>
+<details><summary>3 · SUM, COUNT, SQRT and other functions</summary><p>A function name is followed by parentheses. A colon means “through”: <code>E3:E8</code> includes E3, E4, E5, E6, E7 and E8.</p><table class="helpTable"><tr><th>Formula</th><th>What it does</th></tr><tr><td><code>=SUM(E3:E8)</code></td><td>Adds the six cells.</td></tr><tr><td><code>=COUNT(E3:E8)</code></td><td>Counts numeric entries, including zero.</td></tr><tr><td><code>=AVERAGE(E3:E8)</code></td><td>Finds the mean of numeric entries.</td></tr><tr><td><code>=SQRT(B23/(B13-2))</code></td><td>Takes the square root of the expression inside.</td></tr><tr><td><code>=ABS(B21)</code></td><td>Returns a value’s magnitude.</td></tr></table>
+<p>SUM, COUNT and AVERAGE accept one cell or one rectangular range. For separate ranges, use <code>=SUM(E3:E5)+SUM(E7:E8)</code>. These functions ignore blank cells and text in a range, but errors in formula cells remain errors. Include all your intended primary readings; exclude headers, summary cells and repeat/check readings from fit ranges.</p><p>Function names are case-insensitive: SUM and sum both work. This app supports the functions listed here, rather than the full Google Sheets function library.</p></details>
+<details><summary>4 · Fill a formula down a column</summary><ol><li>Enter the formula in the first data row, for example <code>=A3/1000</code> in D3. Press Enter.</li><li>Click D3, then hold <b>Shift</b> and click D8. The selected rectangle should read <b>D3:D8</b> beside the formula bar.</li><li>Click <b>Fill down</b>. D4 receives <code>=A4/1000</code>, D5 receives <code>=A5/1000</code>, and so on.</li></ol><p>Fill down repeats the top selected row. It replaces entries below that row after confirmation when those cells are occupied. You can fill several adjacent columns together.</p></details>
+<details><summary>5 · Keep a reference fixed with $</summary><p>A normal reference changes when you fill down. An absolute reference stays fixed.</p><table class="helpTable"><tr><th>Reference</th><th>Behavior when copied</th></tr><tr><td><code>E3</code></td><td>Row and column may change.</td></tr><tr><td><code>$B$22</code></td><td>Always refers to B22.</td></tr><tr><td><code>B$22</code></td><td>Row 22 stays fixed.</td></tr><tr><td><code>$B22</code></td><td>Column B stays fixed.</td></tr></table>
+<p>For example, if your intercept A is in B22, slope B is in B21, and first force is in E3, use <code>=$B$22+$B$21*E3</code> for predicted position. Filling down changes E3 to E4 but keeps the same fitted A and B.</p><p><b>All cell locations in this guide are examples.</b> Use the addresses in your own worksheet. They match the layout loaded by Load completed example.</p></details>
+<details><summary>6 · Build the Lab 3 calculation</summary><p>Column and summary labels are supplied; you may edit them. Enter your original measurements, then write each calculation formula yourself. Convert masses to kg and positions and position uncertainties to m. Calculate F = mg using exact g = 9.8 m/s², then F² and Fℓ.</p><p>In your summary area, calculate N and the sums of F, ℓ, F² and Fℓ. Translate these expressions into cell references:</p><div class="math">x = F, y = ℓ<br>D = NΣF² − (ΣF)²<br>B = (NΣFℓ − ΣFΣℓ)/D<br>A = (Σℓ − BΣF)/N<br>ℓ̂ᵢ = A + BFᵢ<br>rᵢ = ℓᵢ − ℓ̂ᵢ<br>S = Σrᵢ²<br>s = √[S/(N−2)]<br>δ_A = s√(ΣF²/D)<br>δ_B = s√(N/D)<br>k = 1/B<br>δ_k ≈ δ_B/B²</div>
+<p>Fit uncertainties use residual scatter s, distinct from your measurement uncertainty δᵢ. Keep full precision in your cells; round the final reported result as instructed in Lab 3.</p><p><b>Check calculation</b> compares the result cells you specify with OLS. It gives feedback without replacing your formulas and does not check your unit conversions.</p></details>
+<details><summary>7 · Select, paste and copy</summary><p>Click a cell and Shift-click a second cell to select a rectangle. Click a column letter to select a column; Shift-click another letter to select several columns.</p><p>Copy a rectangular block in another spreadsheet, click its destination cell here, and paste. The block fills cells to the right and below; pasted values replace existing entries in that area. Labels and formulas can be pasted too.</p><p>Use <b>Copy selection</b> to copy displayed results as a table. Use CSV export for both displayed values and a separate record of original entries and formulas.</p></details>
+<details><summary>8 · Create your graphs</summary><ol><li>Select your force and position columns, then click <b>Create graph</b>. You can also choose columns in the dialog.</li><li>Set <b>First data row</b> and <b>Last data row</b> to the primary measurements. Choose the SI position-uncertainty column for vertical error bars.</li><li>Enter the title and axis labels with units. To add your calculated straight line, enter the addresses of your A and B cells.</li><li>Create a second graph with force horizontally and residual vertically. Leave A and B blank and check <b>Add zero reference line</b>.</li></ol><p>Open <b>Edit graph labels, data and axes</b> to adjust bounds or tick spacing. Blank bounds use automatic scaling. Parameter-uncertainty cells can be added to the line caption there. Error bars do not weight the OLS fit.</p></details>
+<details><summary>9 · Save and export for Gradescope</summary><p>The app autosaves in this browser. Click <b>Save</b> to download an editable JSON backup and <b>Open</b> to restore one. Browser storage is not a portable backup.</p><p>Click <b>Export</b> for the table and formula CSV or <b>Preview / print analysis</b>. From the preview, print to PDF using your browser’s print dialog. Each graph also has SVG and PNG export buttons.</p><p>Submit the required tables, calculations and graphs to Gradescope. Enter procedural explanations and interpretation there.</p><p><b>Load completed example</b> supplies artificial measurements and a finished numerical analysis for demonstration. <b>Restore previous sheet</b> returns to the saved pre-example sheet.</p></details>
+<details><summary>10 · Fix a formula error</summary><p>Click a cell showing <b>#ERROR</b>. Read the message in the status bar below the grid or the cell tooltip.</p><ul><li><b>Missing value:</b> a directly referenced cell is blank. Enter the needed value or correct the reference.</li><li><b>Text in a cell:</b> a formula references a heading or a number with units typed into it. Reference the numeric data cell.</li><li><b>Circular reference:</b> the calculation eventually refers back to itself. Check its dependencies.</li><li><b>Result is not finite:</b> check for division by zero or a square root of a negative number.</li><li><b>Unknown name / missing parenthesis:</b> check spelling, parentheses, multiplication signs and cell addresses.</li></ul><p>For example, enter <code>=SQRT(B23/(B13-2))</code> with both closing parentheses. For OLS uncertainty calculations, N must exceed 2 and the force values must vary.</p></details>
+</aside></div>
+
+<!-- GRAPH SETTINGS DIALOG -->
+<dialog id="graphDialog"><form id="graphForm"><div class="dialoghead"><h2>Create a scatter plot</h2><button type="button" data-close="graphDialog">×</button></div>
+<div class="fields"><label>Horizontal column<select id="gx"></select></label><label>Vertical column<select id="gy"></select></label><label>First data row<input id="gstart" type="number" min="1" value="3"></label><label>Last data row<input id="gend" type="number" min="1" value="8"></label><label>Vertical uncertainty column<select id="ge"></select></label><label>Graph title<input id="gtitle" value="Spring position versus force"></label><label>Horizontal label<input id="gxlabel" value="Applied force F (N)"></label><label>Vertical label<input id="gylabel" value="Spring position ℓ (m)"></label><label>Intercept A cell (optional)<input id="ga" placeholder="e.g. J5"></label><label>Slope B cell (optional)<input id="gb" placeholder="e.g. J4"></label></div>
+<label class="checkbox"><input id="gzero" type="checkbox"> Add zero reference line (for residuals)</label><p class="hint">The overlay uses your A and B cells. Error bars do not weight the fit. Columns must contain values in the units shown on your axes.</p><p id="graphError" role="status"></p><button class="primary" type="submit">Create graph</button></form></dialog>
+<dialog id="checkDialog"><form id="checkForm"><div class="dialoghead"><h2>Check your OLS calculation</h2><button type="button" data-close="checkDialog">×</button></div>
+<p>This checks your arithmetic without replacing entries. Select SI force and position columns and the primary data rows.</p><div class="fields"><label>Force column<select id="cx"></select></label><label>Position column<select id="cy"></select></label><label>First row<input id="cstart" type="number" value="3" min="1"></label><label>Last row<input id="cend" type="number" value="8" min="1"></label><label>Your A cell<input id="ca" placeholder="e.g. J5"></label><label>Your B cell<input id="cb" placeholder="e.g. J4"></label><label>Your δ_A cell (optional)<input id="cda"></label><label>Your δ_B cell (optional)<input id="cdb"></label><label>Your k cell (optional)<input id="ck"></label><label>Your δ_k cell (optional)<input id="cdk"></label></div>
+<button type="submit" class="primary">Check my entries</button><p id="checkStatus" role="status"></p></form></dialog>
+
+<!-- EXPORT OPTIONS DIALOG -->
+<dialog id="exportDialog"><div class="dialoghead"><h2>Export your work</h2><button data-close="exportDialog">×</button></div>
+<div class="exportbuttons"><button id="csv">Table + formulas CSV</button><button id="report">Preview / print analysis</button><button id="save2">Editable worksheet JSON</button></div>
+<p class="hint">Each graph has SVG and PNG export buttons. Exports contain your table, calculations and graphs. Written answers belong in Gradescope.</p></dialog>
+<div id="reportControls" hidden><button id="back">← Back to sheet</button><button id="print">Print / save analysis PDF</button></div>
+<div id="reportContent" hidden></div>
+<!-- FORMULA PARSER: internal arithmetic engine; no label edits needed. -->
+<script>/* Small arithmetic grammar; no evaluation of JavaScript or property access. */
+(function(root){function calculate(source,vars={}){const s=String(source).replace(/^\s*=/,'').trim();if(s.length>500)throw Error('Formula too long');const ts=s.match(/(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?|[A-Za-z_][A-Za-z_0-9]*|[()+\-*/^]/g)||[];if(ts.join('')!==s.replace(/\s/g,''))throw Error('Use arithmetic, names, sqrt or abs only');let i=0;
+function atom(){let t=ts[i++];if(t==='('){let v=add();if(ts[i++]!==')')throw Error('Missing )');return v;}if(t&&/^(?:\d|\.)/.test(t))return Number(t);if(t==='sqrt'||t==='abs'){if(ts[i++]!=='(')throw Error('Function requires parentheses');let v=add();if(ts[i++]!==')')throw Error('Missing )');return t==='sqrt'?Math.sqrt(v):Math.abs(v);}if(t&&Object.prototype.hasOwnProperty.call(vars,t))return vars[t];throw Error('Unknown or unavailable name: '+(t||'empty formula'));}
+function power(){let v=atom();if(ts[i]==='^'){i++;v=Math.pow(v,unary());}return v;}function unary(){if(ts[i]==='+'){i++;return unary();}if(ts[i]==='-'){i++;return -unary();}return power();}function mul(){let v=unary();while(ts[i]==='*'||ts[i]==='/'){let op=ts[i++],w=unary();v=op==='*'?v*w:v/w;}return v;}function add(){let v=mul();while(ts[i]==='+'||ts[i]==='-'){let op=ts[i++],w=mul();v=op==='+'?v+w:v-w;}return v;}const v=add();if(i!==ts.length)throw Error('Unexpected token');if(!Number.isFinite(v))throw Error('Result is not finite');return v;}root.labCalculate=calculate;if(typeof module!=='undefined')module.exports=calculate;})(globalThis);
+</script>
+
+<!-- WORKSHEET TEMPLATES / APPLICATION ENGINE -->
+<script>/* Instructor demonstration: all observations are artificial. */
+// Instructor-only artificial measurements and formulas.
+// Final worksheet labels come from WORKSHEET_LABELS above.
+function makeCompletedExample(){
+const d={version:1,title:'Lab 3 · Completed artificial-data example',nr:34,nc:12,cells:{},graphs:[]};
+const put=(a,v)=>d.cells[a]=String(v);
+const labels=['Total mass','Position ℓ','Uncertainty δᵢ','Mass m','Force F = x','Position ℓ = y','Uncertainty δᵢ','F² = x²','Fℓ = xy','Predicted ℓ̂','Residual r','Residual r²'];
+const units=['g','cm','cm','kg','N','m','m','N²','N·m','m','m','m²'];labels.forEach((v,c)=>{put(String.fromCharCode(65+c)+'1',v);put(String.fromCharCode(65+c)+'2',units[c]);});
+[50,100,150,200,250,300].forEach((m,i)=>{const r=i+3;put('A'+r,m);put('B'+r,[8.6,11.0,13.5,15.9,18.4,20.7][i]);put('C'+r,.05);put('D'+r,'=A'+r+'/1000');put('E'+r,'=D'+r+'*$B$12');put('F'+r,'=B'+r+'/100');put('G'+r,'=C'+r+'/100');put('H'+r,'=E'+r+'^2');put('I'+r,'=E'+r+'*F'+r);put('J'+r,'=$B$22+$B$21*E'+r);put('K'+r,'=F'+r+'-J'+r);put('L'+r,'=K'+r+'^2');});
+put('A10','Σ columns');for(const c of ['D','E','F','G','H','I','J','K','L'])put(c+'10','=SUM('+c+'3:'+c+'8)');
+const summary=[
+[12,'g (exact)',9.8,'m/s²'],[13,'N','=COUNT(E3:E8)','observations'],[14,'Σ F','=SUM(E3:E8)','N'],[15,'Σ ℓ','=SUM(F3:F8)','m'],[16,'Σ F²','=SUM(H3:H8)','N²'],[17,'Σ Fℓ','=SUM(I3:I8)','N·m'],[18,'Mean F','=AVERAGE(E3:E8)','N'],[19,'Mean ℓ','=AVERAGE(F3:F8)','m'],[20,'D','=B13*B16-B14^2','N²'],[21,'Slope B','=(B13*B17-B14*B15)/B20','m/N'],[22,'Intercept A','=(B15-B21*B14)/B13','m'],[23,'Score S','=SUM(L3:L8)','m²'],[24,'Scatter s','=SQRT(B23/(B13-2))','m'],[25,'Uncertainty δ_A','=B24*SQRT(B16/B20)','m'],[26,'Uncertainty δ_B','=B24*SQRT(B13/B20)','m/N'],[27,'Spring constant k','=1/B21','N/m'],[28,'Uncertainty δ_k','=B26/B21^2','N/m'],[29,'Relative δ_B/B','=B26/ABS(B21)','dimensionless'],[30,'Assumed δ_m','=0.1/1000','kg'],[31,'Estimated δ_F','=B12*B30','N'],[32,'|B|δ_F','=ABS(B21)*B31','m']
+];summary.forEach(([r,name,value,unit])=>{put('A'+r,name);put('B'+r,value);put('C'+r,unit);});
+put('E23','Reported k');put('F23','20.15');put('G23','N/m');
+put('E24','Uncertainty δ_k');put('F24','0.10');put('G24','N/m');
+d.graphs=[{x:4,y:5,error:6,start:3,end:8,title:'Artificial data: spring position versus force',xlabel:'Applied force F (N)',ylabel:'Spring position ℓ (m)',a:'B22',b:'B21',da:'B25',db:'B26',zero:false,xmin:'',xmax:'',ymin:'',ymax:'',xtick:'',ytick:''},{x:4,y:10,error:-1,start:3,end:8,title:'Artificial data: residuals versus force',xlabel:'Applied force F (N)',ylabel:'Residual r (m)',a:'',b:'',zero:true,xmin:'',xmax:'',ymin:'',ymax:'',xtick:'',ytick:''}];return applyWorksheetLabels(d);
+}
+
+// Blank starting worksheet: only labels and units, never supplied answers.
+function makeLabeledTemplate(){
+const sample=makeCompletedExample(),d={version:1,title:'PY251 Lab 3 worksheet',nr:34,nc:12,cells:{},graphs:[]};
+const keep=[];
+for(let c=0;c<12;c++)for(const r of [1,2])keep.push(String.fromCharCode(65+c)+r);
+keep.push('A10');
+for(let r=12;r<=32;r++)for(const c of ['A','C'])keep.push(c+r);
+keep.push('E23','G23','E24','G24');
+for(const a of keep)if(sample.cells[a]!==undefined)d.cells[a]=sample.cells[a];
+return applyWorksheetLabels(d);
+}
+</script>
+
+<!-- WORKSHEET TEMPLATES / APPLICATION ENGINE -->
+<script>const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Autosave namespace: keep student and instructor sheets separate.
+const KEY='py251-labeled-grid-v1';
+function letter(c){let s='';for(c++;c;c=Math.floor((c-1)/26))s=String.fromCharCode(65+(c-1)%26)+s;return s;}
+function address(r,c){return letter(c)+(r+1);}
+function parseRef(ref){const m=String(ref).trim().toUpperCase().match(/^\$?([A-Z]{1,2})\$?([1-9]\d*)$/);if(!m)throw Error('Use a cell address such as J5.');let c=0;for(const x of m[1])c=c*26+x.charCodeAt(0)-64;return {r:+m[2]-1,c:c-1};}
+function blank(){return makeLabeledTemplate();}
+function validate(d){if(!d||d.version!==1||typeof d.title!=='string'||d.title.length>300||!Number.isInteger(d.nr)||d.nr<1||d.nr>300||!Number.isInteger(d.nc)||d.nc<1||d.nc>52||!d.cells||Array.isArray(d.cells)||typeof d.cells!=='object'||!Array.isArray(d.graphs)||d.graphs.length>12)throw Error('Invalid blank worksheet file.');for(const [key,v] of Object.entries(d.cells)){const p=parseRef(key);if(address(p.r,p.c)!==key||p.r>=d.nr||p.c>=d.nc||typeof v!=='string'||v.length>2000)throw Error('Invalid cell data.');}for(const g of d.graphs){if(!Number.isInteger(g.x)||!Number.isInteger(g.y)||g.x<0||g.y<0||g.x>=d.nc||g.y>=d.nc||!Number.isInteger(g.error)||g.error< -1||g.error>=d.nc||!Number.isInteger(g.start)||!Number.isInteger(g.end)||g.start<0||g.start>300||g.end<0||g.end>300||typeof g.zero!=='boolean')throw Error('Invalid graph data.');for(const key of ['title','xlabel','ylabel','a','b','xmin','xmax','ymin','ymax','xtick','ytick'])if(typeof g[key]!=='string'||g[key].length>500)throw Error('Invalid graph settings.');}for(const g of d.graphs)for(const key of ['da','db'])if(g[key]!==undefined&&(typeof g[key]!=='string'||g[key].length>30))throw Error('Invalid uncertainty cell.');if(d.cells.E25==='Analysis notes below')d.cells.E25='OLS · primary only';if(d.cells.E26==='Open Export for report')d.cells.E26='g = 9.8 m/s² (exact)';return d;}
+let state=blank(),selection={r:0,c:0,r2:0,c2:0},model,editing=false,exampleBackup=null;try{const v=localStorage.getItem(KEY);if(v)state=validate(JSON.parse(v));}catch(e){$('saved').textContent='Could not restore autosave';}
+try{const backup=localStorage.getItem(KEY+'-before-example');if(backup){exampleBackup=validate(JSON.parse(backup));$('restoreExample').hidden=false;}}catch(e){}
+
+// Compatibility repairs for older saved worksheets; preserve these blocks.
+try{if(localStorage.getItem(KEY+'-k-checks-repair-v1')!=='done'){
+if(state.cells.A27==='Spring constant k'||state.cells.A21==='Slope B'){
+for(let row=12;row<=17;row++)for(const col of ['E','F','G','H','I'])delete state.cells[col+row];
+if(!state.cells.A27)state.cells.A27='Spring constant k';
+if(!state.cells.C27)state.cells.C27='N/m';
+if(!state.cells.E23)state.cells.E23='Reported k';
+if(state.title==='Lab 3 · Completed artificial-data example'&&!state.cells.F23){try{const m=evaluator(state);state.cells.F23=m.scalar('B27').toFixed(2)+' ± '+m.scalar('B28').toFixed(2)+' N/m';}catch(e){state.cells.F23='=B27';}}
+}localStorage.setItem(KEY+'-k-checks-repair-v1','done');}}catch(e){}
+
+try{if(localStorage.getItem(KEY+'-separate-k-v1')!=='done'){
+if(state.cells.E23==='Reported k'){
+const combined=String(state.cells.F23||'').match(/^\s*([+-]?[\d.]+)\s*±\s*([\d.]+)\s*N\/m\s*$/);
+if(combined){state.cells.F23=combined[1];state.cells.F24=combined[2];}
+state.cells.E24='Uncertainty δ_k';state.cells.G23='N/m';state.cells.G24='N/m';
+}localStorage.setItem(KEY+'-separate-k-v1','done');}}catch(e){}
+
+// Update unchanged labels in an autosave, while preserving user-edited labels.
+// The prior configuration lets future file edits update earlier custom defaults.
+try {
+  const previousLabels = JSON.parse(
+    localStorage.getItem(KEY + '-label-defaults') || 'null'
+  ) || ORIGINAL_WORKSHEET_LABELS;
+  for (const [cellAddress, label] of Object.entries(WORKSHEET_LABELS)) {
+    const current = state.cells[cellAddress];
+    if (current === undefined || current === previousLabels[cellAddress]) {
+      state.cells[cellAddress] = label;
+    }
+  }
+  localStorage.setItem(KEY + '-label-defaults', JSON.stringify(WORKSHEET_LABELS));
+} catch (error) {
+  // Storage may be unavailable; newly created sheets still use the configuration.
+}
+
+
+// ======================================================================
+// CELL SELECTION AND EDITING — ranges, cell addresses and autosave
+// ======================================================================
+function bounds(){return {r1:Math.min(selection.r,selection.r2),r2:Math.max(selection.r,selection.r2),c1:Math.min(selection.c,selection.c2),c2:Math.max(selection.c,selection.c2)};}
+function raw(r,c){return state.cells[address(r,c)]||'';}
+function setRaw(r,c,v){const k=address(r,c);if(v==='')delete state.cells[k];else state.cells[k]=v;}
+function autosave(){try{localStorage.setItem(KEY,JSON.stringify(state));$('saved').textContent='Saved locally';}catch(e){$('saved').textContent='Save file · autosave unavailable';}}
+
+// ======================================================================
+// FORMULA EVALUATION — spreadsheet references, functions and error reporting
+// ======================================================================
+function evaluator(data=state){const cache=new Map(),busy=new Set();function cell(r,c){if(r<0||c<0||r>=data.nr||c>=data.nc)throw Error('Reference outside this sheet');const id=address(r,c);if(cache.has(id))return cache.get(id);if(busy.has(id))throw Error('Circular reference at '+id);busy.add(id);try{const text=data.cells[id]||'';let v;if(!text.trim())v=null;else if(text.trim().startsWith('='))v=expression(text.trim().slice(1));else if(/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(text.trim()))v=Number(text.trim());else v=text;if(typeof v==='number'&&!Number.isFinite(v))throw Error('Result is not finite');cache.set(id,v);return v;}finally{busy.delete(id);}}
+function scalar(ref){const p=parseRef(ref),v=cell(p.r,p.c);if(v===null)throw Error('Missing value in '+ref.replace(/\$/g,''));if(typeof v!=='number')throw Error('Text in '+ref.replace(/\$/g,''));return v;}
+function expression(src){if(src.length>1000)throw Error('Formula too long');let vars={},n=0;
+let s=src.replace(/\b(SUM|COUNT|AVERAGE)\s*\(\s*(\$?[A-Z]{1,2}\$?[1-9]\d*)\s*(?::\s*(\$?[A-Z]{1,2}\$?[1-9]\d*))?\s*\)/gi,(all,fn,first,last)=>{const a=parseRef(first),b=parseRef(last||first);if(a.r>b.r||a.c>b.c)throw Error('Range start must precede its end');if(b.r>=data.nr||b.c>=data.nc)throw Error('Range outside this sheet');const values=[];for(let r=a.r;r<=b.r;r++)for(let c=a.c;c<=b.c;c++){const v=cell(r,c);if(typeof v==='number')values.push(v);}let v;if(fn.toUpperCase()==='COUNT')v=values.length;else if(fn.toUpperCase()==='SUM')v=values.reduce((a,b)=>a+b,0);else{if(!values.length)throw Error('AVERAGE needs numeric values');v=values.reduce((a,b)=>a+b,0)/values.length;}const key='agg_'+n++;vars[key]=v;return key;});
+s=s.replace(/\$?[A-Z]{1,2}\$?[1-9]\d*/gi,(ref,offset,whole)=>{if(offset>0&&/[A-Za-z_0-9.]/.test(whole[offset-1]))return ref;const end=whole[offset+ref.length];if(end&&/[A-Za-z_0-9]/.test(end))return ref;const key='ref_'+n++;vars[key]=scalar(ref);return key;}).replace(/\bSQRT\b/gi,'sqrt').replace(/\bABS\b/gi,'abs');return labCalculate(s,vars);}
+function safe(r,c){try{return {v:cell(r,c)};}catch(e){return {v:null,error:e.message};}}return {cell,safe,scalar};}
+function display(out){return out.error?'#ERROR':out.v===null?'':typeof out.v==='number'?Number(out.v.toPrecision(8)).toString():out.v;}
+
+// ======================================================================
+// GRID DISPLAY — inputs, selection highlighting and formula bar
+// ======================================================================
+function render(){ $('title').value=state.title;$('sheet').innerHTML=`<thead><tr><th></th>${Array.from({length:state.nc},(_,c)=>`<th data-column="${c}" scope="col">${letter(c)}</th>`).join('')}</tr></thead><tbody>${Array.from({length:state.nr},(_,r)=>`<tr><th data-rowhead="${r}" scope="row">${r+1}</th>${Array.from({length:state.nc},(_,c)=>`<td id="cell-${r}-${c}"><input data-r="${r}" data-c="${c}" aria-label="${address(r,c)}" autocomplete="off" spellcheck="false"></td>`).join('')}</tr>`).join('')}</tbody>`;refresh();updateSelection();renderGraphs();}
+function refresh(){model=evaluator();for(let r=0;r<state.nr;r++)for(let c=0;c<state.nc;c++){const td=$('cell-'+r+'-'+c),input=td.firstElementChild,out=model.safe(r,c);if(document.activeElement!==input)input.value=display(out);input.title=out.error|| (raw(r,c).startsWith('=')?raw(r,c)+' → '+out.v:raw(r,c));td.classList.toggle('error',!!out.error);}refreshPlots();autosave();}
+function updateSelection(){const b=bounds();for(const td of document.querySelectorAll('#sheet td.selected,#sheet td.active'))td.classList.remove('selected','active');for(let r=b.r1;r<=b.r2;r++)for(let c=b.c1;c<=b.c2;c++)$('cell-'+r+'-'+c)?.classList.add('selected');$('cell-'+selection.r+'-'+selection.c)?.classList.add('active');$('address').textContent=address(b.r1,b.c1)+(b.r1!==b.r2||b.c1!==b.c2?':'+address(b.r2,b.c2):'');$('formula').value=raw(selection.r,selection.c);const out=model.safe(selection.r,selection.c);$('selectionStatus').textContent=out.error|| (b.r1!==b.r2||b.c1!==b.c2?`${b.r2-b.r1+1} rows × ${b.c2-b.c1+1} columns selected`:raw(selection.r,selection.c).startsWith('=')?'Formula: '+raw(selection.r,selection.c):'Select a cell and enter a label, value, or formula.');}
+function select(r,c,extend=false,focus=false){if(r<0||c<0||r>=state.nr||c>=state.nc)return;if(extend){selection.r2=r;selection.c2=c;}else selection={r,c,r2:r,c2:c};updateSelection();if(focus)$('cell-'+r+'-'+c).firstElementChild.focus();}
+function commit(input){if(input.dataset.r===undefined)return;setRaw(+input.dataset.r,+input.dataset.c,input.value);editing=false;refresh();input.value=display(model.safe(+input.dataset.r,+input.dataset.c));updateSelection();}
+$('sheet').addEventListener('focusin',e=>{const t=e.target;if(t.dataset.r===undefined)return;select(+t.dataset.r,+t.dataset.c);t.value=raw(+t.dataset.r,+t.dataset.c);editing=true;});
+$('sheet').addEventListener('input',e=>{if(e.target.dataset.r!==undefined)$('formula').value=e.target.value;});
+$('sheet').addEventListener('focusout',e=>{if(e.target.dataset.r!==undefined&&editing)commit(e.target);});
+$('sheet').addEventListener('click',e=>{const t=e.target;if(t.dataset.r!==undefined&&e.shiftKey){e.preventDefault();if(editing)commit(t);selection=lastAnchor?{...lastAnchor,r2:+t.dataset.r,c2:+t.dataset.c}:selection;updateSelection();}if(t.dataset.column!==undefined){const c=+t.dataset.column;if(e.shiftKey){selection.r=0;selection.r2=state.nr-1;selection.c2=c;}else selection={r:0,r2:state.nr-1,c,c2:c};updateSelection();}if(t.dataset.rowhead!==undefined){const r=+t.dataset.rowhead;selection={r,r2:r,c:0,c2:state.nc-1};updateSelection();}});
+let lastAnchor=null;$('sheet').addEventListener('pointerdown',e=>{if(e.target.dataset.r!==undefined){if(e.shiftKey)lastAnchor={...selection};else lastAnchor=null;}});
+$('sheet').addEventListener('keydown',e=>{const t=e.target;if(t.dataset.r===undefined)return;let r=+t.dataset.r,c=+t.dataset.c;if(e.key==='Escape'){e.preventDefault();t.value=raw(r,c);editing=false;t.blur();refresh();updateSelection();return;}if(['Enter','Tab','ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();commit(t);if(e.key==='Enter'||e.key==='ArrowDown')r+=e.shiftKey?-1:1;else if(e.key==='ArrowUp')r--;else{c+=e.shiftKey?-1:1;if(c>=state.nc){c=0;r++;}if(c<0){c=state.nc-1;r--;}}select(r,c,false,true);} });
+$('formula').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();applyFormula();}if(e.key==='Escape')$('formula').value=raw(selection.r,selection.c);});function applyFormula(){setRaw(selection.r,selection.c,$('formula').value);refresh();updateSelection();}$('apply').onclick=applyFormula;
+$('sheet').addEventListener('paste',e=>{const t=e.target;if(t.dataset.r===undefined)return;const text=e.clipboardData.getData('text');if(!/[\t\n]/.test(text))return;e.preventDefault();const block=text.replace(/\r/g,'').replace(/\n$/,'').split('\n').map(s=>s.split('\t')),r=+t.dataset.r,c=+t.dataset.c,cols=Math.max(...block.map(v=>v.length));if(r+block.length>300||c+cols>52)return alert('Use at most 300 rows and 52 columns.');editing=false;state.nr=Math.max(state.nr,r+block.length);state.nc=Math.max(state.nc,c+cols);block.forEach((row,i)=>row.forEach((v,j)=>setRaw(r+i,c+j,v)));selection={r,c,r2:r+block.length-1,c2:c+cols-1};render();});
+function translated(formula,dr,dc){if(!formula.startsWith('='))return formula;return formula.replace(/(\$?)([A-Z]{1,2})(\$?)([1-9]\d*)/gi,(all,ac,letters,ar,row,offset,whole)=>{if(offset>0&&/[A-Za-z_0-9.]/.test(whole[offset-1]))return all;const p=parseRef(all),r=p.r+(ar?0:dr),c=p.c+(ac?0:dc);if(r<0||c<0||r>=300||c>=52)throw Error('Fill would create an invalid reference.');return ac+letter(c)+ar+(r+1);});}
+$('fill').onclick=()=>{const b=bounds();if(b.r1===b.r2){$('selectionStatus').textContent='Select the source cell and cells below it using Shift-click, then Fill down.';return;}const changes=[];try{for(let c=b.c1;c<=b.c2;c++)for(let r=b.r1+1;r<=b.r2;r++)changes.push([r,c,translated(raw(b.r1,c),r-b.r1,0)]);if(changes.some(([r,c])=>raw(r,c).trim())&&!confirm('Fill down will replace entries in the selected cells below the first row. Continue?'))return;changes.forEach(([r,c,v])=>setRaw(r,c,v));render();}catch(e){$('selectionStatus').textContent=e.message;}};
+$('addrow').onclick=()=>{state.nr=Math.min(300,state.nr+10);render();};$('addcol').onclick=()=>{state.nc=Math.min(52,state.nc+1);render();};$('title').addEventListener('input',()=>{state.title=$('title').value;autosave();});$('guideToggle').onclick=()=>$('guide').hidden=!$('guide').hidden;$('guideClose').onclick=()=>$('guide').hidden=true;
+function download(name,text,type){const u=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+$('example').onclick=()=>{if(Object.keys(state.cells).length&&!confirm('Replace this sheet with the completed artificial-data example? Save your current worksheet first if you need it.'))return;if(!exampleBackup){exampleBackup=JSON.parse(JSON.stringify(state));try{localStorage.setItem(KEY+'-before-example',JSON.stringify(exampleBackup));}catch(e){}}$('restoreExample').hidden=false;state=makeCompletedExample();selection={r:0,c:0,r2:0,c2:0};render();window.scrollTo(0,0);$('sheetWrap').scrollTo(0,0);};
+$('restoreExample').onclick=()=>{if(!exampleBackup)return;if(!confirm('Restore the sheet from before you loaded the example? Any edits to the example will be replaced.'))return;state=exampleBackup;exampleBackup=null;try{localStorage.removeItem(KEY+'-before-example');}catch(e){}$('restoreExample').hidden=true;selection={r:0,c:0,r2:0,c2:0};render();window.scrollTo(0,0);};
+
+// FILE AND TOOLBAR ACTIONS — saving, importing, exporting and dialogs
+$('save').onclick=$('save2').onclick=()=>download('py251-blank-worksheet.json',JSON.stringify(state,null,2),'application/json');$('fresh').onclick=()=>{if(Object.keys(state.cells).length&&!confirm('Start a labeled Lab 3 sheet with empty data and formula cells? Save your current worksheet first if you need it.'))return;state=blank();selection={r:0,c:0,r2:0,c2:0};render();};
+$('open').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>3000000)throw Error('File too large.');const d=validate(JSON.parse(await f.text()));if(Object.keys(state.cells).length&&!confirm('Replace the current sheet with this saved worksheet?'))return;state=d;selection={r:0,c:0,r2:0,c2:0};render();}catch(e){alert('Could not open: '+e.message);}finally{$('open').value='';}};
+function selectedText(){const b=bounds(),lines=[];for(let r=b.r1;r<=b.r2;r++){const row=[];for(let c=b.c1;c<=b.c2;c++)row.push(display(model.safe(r,c)));lines.push(row.join('\t'));}return lines.join('\n');}$('copy').onclick=async()=>{const text=selectedText();try{await navigator.clipboard.writeText(text);$('selectionStatus').textContent='Selection copied.';}catch(e){download('selection.txt',text,'text/plain');$('selectionStatus').textContent='Clipboard unavailable; selection downloaded.';}};
+function columnOptions(none=false){return (none?'<option value="-1">None</option>':'')+Array.from({length:state.nc},(_,c)=>{const label=raw(0,c);return `<option value="${c}">${letter(c)}${label&&!label.startsWith('=')?' · '+esc(label.slice(0,40)):''}</option>`;}).join('');}
+function selectedColumns(){const b=bounds();return [b.c1,b.c2===b.c1?Math.min(state.nc-1,b.c1+1):b.c2];}
+$('graph').onclick=()=>{if(state.graphs.length>=12)return alert('Use at most 12 graphs.');const [x,y]=selectedColumns();for(const id of ['gx','gy'])$(id).innerHTML=columnOptions();$('ge').innerHTML=columnOptions(true);$('gx').value=x;$('gy').value=y;$('ge').value=-1;const b=bounds();$('gstart').value=b.r1===0?'3':b.r1+1;$('gend').value=b.r2===0||b.r2===state.nr-1?Math.min(state.nr,8):b.r2+1;$('graphError').textContent='';$('graphDialog').showModal();};
+function getGraph(){return {x:+$('gx').value,y:+$('gy').value,error:+$('ge').value,start:+$('gstart').value,end:+$('gend').value,title:$('gtitle').value,xlabel:$('gxlabel').value,ylabel:$('gylabel').value,a:$('ga').value.trim().toUpperCase(),b:$('gb').value.trim().toUpperCase(),zero:$('gzero').checked,xmin:'',xmax:'',ymin:'',ymax:'',xtick:'',ytick:''};}
+function points(g){if(!Number.isInteger(g.start)||!Number.isInteger(g.end)||g.start<1||g.end<g.start||g.end>state.nr)throw Error('Choose a valid first and last data row.');const ps=[];for(let r=g.start-1;r<g.end;r++){const x=model.cell(r,g.x),y=model.cell(r,g.y);if(x===null&&y===null)continue;if(typeof x!=='number'||typeof y!=='number')throw Error('Both graph columns need numeric values in row '+(r+1)+'.');let dy=g.error<0?0:model.cell(r,g.error);if(typeof dy!=='number'||dy<0)throw Error('Uncertainty must be a nonnegative number in row '+(r+1)+'.');ps.push({x,y,dy,row:r+1});}if(!ps.length)throw Error('Enter numeric measurements in the selected data rows.');return ps;}
+$('graphForm').onsubmit=e=>{e.preventDefault();try{const g=getGraph();points(g);if(!!g.a!==!!g.b)throw Error('Supply both A and B cell addresses, or leave both blank.');if(g.a){model.scalar(g.a);model.scalar(g.b);}state.graphs.push(g);$('graphDialog').close();renderGraphs();refresh();$('plots').scrollIntoView({behavior:'smooth'});}catch(e){$('graphError').textContent=e.message;}};
+
+// ======================================================================
+// GRAPH DRAWING — scatter points, error bars, fitted lines and axes
+// ======================================================================
+function graphSVG(g,index){const ps=points(g);let a=0,b=0,line=false;if(g.a||g.b){if(!g.a||!g.b)throw Error('Set both A and B cell addresses.');a=model.scalar(g.a);b=model.scalar(g.b);line=true;}let xl=Math.min(...ps.map(p=>p.x)),xh=Math.max(...ps.map(p=>p.x)),yl=Math.min(...ps.map(p=>p.y-p.dy),...(g.zero?[0]:[])),yh=Math.max(...ps.map(p=>p.y+p.dy),...(g.zero?[0]:[]));if(line){yl=Math.min(yl,a+b*xl,a+b*xh);yh=Math.max(yh,a+b*xl,a+b*xh);}const dx=(xh-xl||Math.abs(xh)*.1||1)*.08,dy=(yh-yl||Math.abs(yh)*.1||.001)*.12;xl-=dx;xh+=dx;yl-=dy;yh+=dy;for(const [key,set] of [['xmin',v=>xl=v],['xmax',v=>xh=v],['ymin',v=>yl=v],['ymax',v=>yh=v]])if(g[key]!==''){const n=Number(g[key]);if(!Number.isFinite(n))throw Error('Bounds must be finite.');set(n);}if(!(xh>xl&&yh>yl))throw Error('Axis maximum must exceed minimum.');const W=850,H=520,L=95,T=50,R=30,D=130,iw=W-L-R,ih=H-T-D,X=x=>L+(x-xl)/(xh-xl)*iw,Y=y=>T+ih-(y-yl)/(yh-yl)*ih;
+function ticks(lo,hi,key){if(g[key]==='')return Array.from({length:6},(_,i)=>lo+(hi-lo)*i/5);const step=Number(g[key]);if(!(step>0))throw Error('Tick spacing must be positive.');const first=Math.ceil(lo/step)*step,count=Math.floor((hi-first)/step)+1;if(count>80)throw Error('Use coarser tick spacing (80 ticks maximum).');return Array.from({length:Math.max(0,count)},(_,i)=>first+i*step);}
+let svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(g.title)}"><rect width="${W}" height="${H}" fill="white"/><style>
+text {
+  font-family:Arial,sans-serif;
+  font-size:12px;
+  fill:#4e6656
+}
+
+</style>
+<text x="${L}" y="27" style="font-size:18px;fill:#254f39">${esc(g.title)}</text><defs><clipPath id="clip${index}"><rect x="${L}" y="${T}" width="${iw}" height="${ih}"/></clipPath></defs>`;for(const x of ticks(xl,xh,'xtick'))svg+=`<path d="M${X(x)} ${T}V${T+ih}" stroke="#e1e8df"/><text x="${X(x)}" y="${T+ih+23}" text-anchor="middle">${Number(x.toPrecision(4))}</text>`;for(const y of ticks(yl,yh,'ytick'))svg+=`<path d="M${L} ${Y(y)}H${L+iw}" stroke="#e1e8df"/><text x="${L-10}" y="${Y(y)+4}" text-anchor="end">${Number(y.toPrecision(4))}</text>`;svg+=`<text x="${L+iw/2}" y="${H-78}" text-anchor="middle">${esc(g.xlabel)}</text><text transform="translate(19 ${T+ih/2}) rotate(-90)" text-anchor="middle">${esc(g.ylabel)}</text><g clip-path="url(#clip${index})">`;if(g.zero)svg+=`<path d="M${L} ${Y(0)}H${L+iw}" stroke="#9bb09e" stroke-dasharray="5 4"/>`;if(line)svg+=`<path d="M${X(xl)} ${Y(a+b*xl)}L${X(xh)} ${Y(a+b*xh)}" stroke="#b45a4c" stroke-width="2.2"/>`;for(const p of ps){const x=X(p.x),y=Y(p.y),u=Y(p.y+p.dy),d=Y(p.y-p.dy);if(p.dy)svg+=`<path d="M${x} ${u}V${d}M${x-4} ${u}H${x+4}M${x-4} ${d}H${x+4}" stroke="#2b7353"/>`;svg+=`<circle cx="${x}" cy="${y}" r="4" fill="#2b7353"><title>Row ${p.row}: ${p.x}, ${p.y}</title></circle>`;}svg+=`</g><text x="${L}" y="${H-47}">● Measurements${line?'     — Your line: y = '+Number(a.toPrecision(6))+' + '+Number(b.toPrecision(6))+' x':''}${g.zero?'     ┄ Zero reference':''}</text></svg>`;let caption='';if(line&&(g.da||g.db)){const da=g.da?model.scalar(g.da):null,db=g.db?model.scalar(g.db):null;if((da!==null&&da<0)||(db!==null&&db<0))throw Error('Parameter uncertainties must be nonnegative.');caption='A = '+Number(a.toPrecision(6))+(da!==null?' ± '+Number(da.toPrecision(3)):'')+'; B = '+Number(b.toPrecision(6))+(db!==null?' ± '+Number(db.toPrecision(3)):'')+'. Units follow the graph axes.';}if(caption)svg=svg.replace('</svg>',`<text x="${L}" y="${H-20}">${esc(caption)}</text></svg>`);const clipped=ps.some(p=>p.x<xl||p.x>xh||p.y-p.dy<yl||p.y+p.dy>yh);return {svg,hint:`${ps.length} observations · Columns ${letter(g.x)} and ${letter(g.y)} · Rows ${g.start}–${g.end}${clipped?' · Some points or error bars lie outside your axis limits.':''}`};}
+function renderGraphs(){$('plots').hidden=!state.graphs.length;$('plots').innerHTML=state.graphs.map((g,i)=>`<article class="graphcard"><div class="graphhead"><h3>Graph ${i+1}</h3><div><button data-export="${i}" data-type="svg">SVG</button><button data-export="${i}" data-type="png">PNG</button><button data-remove="${i}">Remove</button></div>
+</div>
+<details><summary>Edit graph labels, data and axes</summary><div class="graphsettings">${['title','xlabel','ylabel','a','b','da','db','xmin','xmax','ymin','ymax','xtick','ytick','start','end'].map(key=>`<label>${{title:'Title',xlabel:'Horizontal label',ylabel:'Vertical label',a:'A cell',b:'B cell',da:'δ_A cell (optional)',db:'δ_B cell (optional)',xmin:'X minimum',xmax:'X maximum',ymin:'Y minimum',ymax:'Y maximum',xtick:'X tick spacing',ytick:'Y tick spacing',start:'First data row',end:'Last data row'}[key]}<input data-gi="${i}" data-key="${key}" value="${esc(g[key]??'')}"></label>`).join('')}${['x','y','error'].map(key=>`<label>${{x:'Horizontal column',y:'Vertical column',error:'Vertical uncertainty column'}[key]}<select data-gi="${i}" data-key="${key}">${columnOptions(key==='error')}</select></label>`).join('')}<label class="checkbox"><input type="checkbox" data-gi="${i}" data-key="zero" ${g.zero?'checked':''}> Zero line</label></div>
+</details>
+<div id="plot-${i}"></div>
+<p id="plotHint-${i}" class="graphhint"></p></article>`).join('');state.graphs.forEach((g,i)=>{for(const key of ['x','y','error'])document.querySelector(`[data-gi="${i}"][data-key="${key}"]`).value=g[key];});refreshPlots();}
+function refreshPlots(){state.graphs.forEach((g,i)=>{const el=$('plot-'+i);if(!el)return;try{const p=graphSVG(g,i);el.innerHTML=p.svg;$('plotHint-'+i).textContent=p.hint;}catch(e){el.innerHTML=`<p class="grapherror">${esc(e.message)}</p>`;$('plotHint-'+i).textContent='';}});}
+$('plots').addEventListener('input',e=>{const t=e.target;if(t.dataset.gi===undefined)return;const key=t.dataset.key;if(['start','end'].includes(key)&&(!/^\d+$/.test(t.value)||Number(t.value)>300)){ $('plotHint-'+t.dataset.gi).textContent='Use a whole row number between 1 and 300.';return;}state.graphs[+t.dataset.gi][key]=['x','y','error','start','end'].includes(key)?Number(t.value):key==='zero'?t.checked:t.value;refreshPlots();autosave();});
+$('plots').addEventListener('click',async e=>{const t=e.target;if(t.dataset.remove!==undefined){if(!confirm('Remove this graph? The worksheet cells are retained.'))return;state.graphs.splice(+t.dataset.remove,1);renderGraphs();autosave();}if(t.dataset.export!==undefined){try{const i=+t.dataset.export,svg=graphSVG(state.graphs[i],i).svg;if(t.dataset.type==='svg')return download('graph-'+(i+1)+'.svg',svg,'image/svg+xml');const u=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));try{const img=new Image();await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('Could not render PNG.'));img.src=u;});const cv=document.createElement('canvas');cv.width=1700;cv.height=1040;cv.getContext('2d').drawImage(img,0,0,1700,1040);const blob=await new Promise(resolve=>cv.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG export failed.');download('graph-'+(i+1)+'.png',blob,'image/png');}finally{URL.revokeObjectURL(u);}}catch(e){alert(e.message);}}});
+$('check').onclick=()=>{const [x,y]=selectedColumns();for(const id of ['cx','cy'])$(id).innerHTML=columnOptions();$('cx').value=x;$('cy').value=y;$('checkStatus').textContent='';$('checkDialog').showModal();};
+$('checkForm').onsubmit=e=>{e.preventDefault();try{const ps=points({x:+$('cx').value,y:+$('cy').value,error:-1,start:+$('cstart').value,end:+$('cend').value}),N=ps.length;if(N<3)throw Error('Use at least three points for fit uncertainties; Lab 3 asks for six distinct primary loads.');if(!$('ca').value.trim()||!$('cb').value.trim())throw Error('Specify the cells containing your A and B.');const sx=ps.reduce((s,p)=>s+p.x,0),sy=ps.reduce((s,p)=>s+p.y,0),sx2=ps.reduce((s,p)=>s+p.x*p.x,0),sxy=ps.reduce((s,p)=>s+p.x*p.y,0),D=N*sx2-sx*sx;if(!(D>0))throw Error('The primary data need distinct forces.');const B=(N*sxy-sx*sy)/D,A=(sy-B*sx)/N,S=ps.reduce((s,p)=>s+(p.y-A-B*p.x)**2,0),s=Math.sqrt(S/(N-2)),dA=s*Math.sqrt(sx2/D),dB=s*Math.sqrt(N/D),expected={ca:A,cb:B,cda:dA,cdb:dB,ck:1/B,cdk:dB/B**2},names={ca:'A',cb:'B',cda:'δ_A',cdb:'δ_B',ck:'k',cdk:'δ_k'},wrong=[];for(const [id,v] of Object.entries(expected)){if(!$(id).value.trim())continue;const actual=model.scalar($(id).value);if(!Number.isFinite(v)||Math.abs(actual-v)>Math.max(1e-12,Math.abs(v)*.005))wrong.push(names[id]);}let text=wrong.length?'Review '+wrong.join(', ')+': differs from OLS by more than 0.5%.':'The entries you specified agree with OLS within 0.5% rounding tolerance.';if(B<=0)text+=' The spring interpretation requires a positive well-determined slope.';else if(dB/B>.1)text+=' Relative slope uncertainty is large; discuss reciprocal uncertainty propagation.';text+=' This checks arithmetic from your selected columns, not units or experimental assumptions.';$('checkStatus').textContent=text;}catch(e){$('checkStatus').textContent=e.message;}};
+for(const b of document.querySelectorAll('[data-close]'))b.onclick=()=>$(b.dataset.close).close();$('exports').onclick=()=>$('exportDialog').showModal();
+function usedBounds(){let nr=0,nc=0;for(const key of Object.keys(state.cells)){const p=parseRef(key);nr=Math.max(nr,p.r+1);nc=Math.max(nc,p.c+1);}return {nr,nc};}
+$('csv').onclick=()=>{const b=usedBounds(),rows=[['Displayed values'],['Row',...Array.from({length:b.nc},(_,c)=>letter(c))]];for(let r=0;r<b.nr;r++)rows.push([r+1,...Array.from({length:b.nc},(_,c)=>display(model.safe(r,c)))]);rows.push([],['Original entries and formulas'],['Cell','Entry']);for(const [k,v] of Object.entries(state.cells))rows.push([k,v]);download('worksheet-values-and-formulas.csv',rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv');};
+
+// ======================================================================
+// EXPORT — printable tables, formulas and graphs
+// ======================================================================
+function report(){const b=usedBounds();let html=`<h1>${esc(state.title)}</h1><p>PY251 Lab 3 · Student worksheet and calculation record</p>`;for(let start=0;start<b.nc;start+=7){const end=Math.min(start+7,b.nc);html+=`<h2>Worksheet columns ${letter(start)}–${letter(end-1)}</h2><table><thead><tr><th>Row</th>${Array.from({length:end-start},(_,j)=>`<th>${letter(start+j)}</th>`).join('')}</tr></thead><tbody>${Array.from({length:b.nr},(_,r)=>`<tr><th>${r+1}</th>${Array.from({length:end-start},(_,j)=>`<td>${esc(display(model.safe(r,start+j)))}</td>`).join('')}</tr>`).join('')}</tbody></table>`;}html+='<h2>Formula record</h2><pre>'+esc(Object.entries(state.cells).filter(([k,v])=>v.trim().startsWith('=')).map(([k,v])=>k+' '+v+' → '+display(model.safe(parseRef(k).r,parseRef(k).c))).join('\n')||'No formulas entered.')+'</pre>';html+=state.graphs.map((g,i)=>{try{return `<div class="reportgraph"><h2>${esc(g.title)}</h2>${graphSVG(g,i).svg}</div>`;}catch(e){return '<p>'+esc(e.message)+'</p>';}}).join('');$('reportContent').innerHTML=html;}
+$('report').onclick=()=>{report();$('exportDialog').close();document.body.classList.add('reportmode');$('reportControls').hidden=false;$('reportContent').hidden=false;window.scrollTo(0,0);};$('back').onclick=()=>{document.body.classList.remove('reportmode');$('reportControls').hidden=true;$('reportContent').hidden=true;};$('print').onclick=()=>window.print();window.addEventListener('beforeprint',report);
+
+
+render();
+</script></body></html>
